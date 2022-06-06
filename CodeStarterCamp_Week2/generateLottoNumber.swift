@@ -8,24 +8,56 @@
 import Foundation
 
 
-func generateLottoNumbers(numberOfWinningNumbers: Int = 6) -> [Int] {
-    var winningNumbers: [Int] = []
-    
-    while winningNumbers.count < numberOfWinningNumbers {
+func generateLottoNumber(numberOfWinningNumbers: Int = 6) -> [Int] {
+    var lottoWinningNumbers: [Int] = []
+
+    while lottoWinningNumbers.count < numberOfWinningNumbers {
         let randomNumber = Int.random(in: 1...45)
         
-        if winningNumbers.contains(randomNumber) == false {
-            winningNumbers.append(randomNumber)
+        if lottoWinningNumbers.contains(randomNumber) == false {
+                lottoWinningNumbers.append(randomNumber)
         }
     }
-    return winningNumbers
+    
+    saveLottoHistory(lottoWinningNumbers)
+    return lottoWinningNumbers
+}
+
+let myLottoNumbers: [Int] = [1, 2, 3, 4, 5, 6]
+
+func checkLottoResult(with lottoWinningNumbers: [Int]) {
+    let lottoWinningNumbers: [Int] = lottoWinningNumbers
+    var matchedNumbers: [Int] = []
+    
+    for index in 0..<lottoWinningNumbers.endIndex {
+        if myLottoNumbers.contains(lottoWinningNumbers[index]) == true {
+            matchedNumbers.append(lottoWinningNumbers[index])
+        }
+    }
+    
+    let lastIndex = matchedNumbers.endIndex - 1
+    
+    if matchedNumbers.count > 0 {
+        print("축하합니다! 겹치는 번호는 ", terminator: "")
+        for index in 0...lastIndex {
+            if index == lastIndex {
+                print(matchedNumbers[index], terminator: " ")
+            }
+            else {
+                print(matchedNumbers[index], terminator: ", ")
+            }
+        }
+        print("입니다!")
+    } else {
+        print("아쉽지만 겹치는 번호가 없습니다.")
+    }
 }
 
 var lottoHistory: [String: [Int]] = [:]
 
-func saveLottoResult(from winningNumbers: [Int]) {
+func saveLottoHistory(_ lottoWinningNumbers: [Int]){
     let round = lottoHistory.count + 1
-    lottoHistory["\(round)회차"] = winningNumbers
+    lottoHistory["\(round)회차"] = lottoWinningNumbers
 }
 
 func printLottoHistory(round: Int) {
@@ -35,46 +67,11 @@ func printLottoHistory(round: Int) {
         print("\(round)회차의 로또 당첨 번호는 ", terminator: "")
         for index in 0...lastIndex {
             if index == lastIndex {
-                print(value[index], terminator: "")
+                print(value[index], terminator: " ")
             } else {
                 print(value[index], terminator: ", ")
             }
         }
-        print(" 입니다.")
-    }
-}
-
-let myLottoNumbers: [Int] = [15, 26, 31, 4, 12, 7]
-var matchedNumbers: [Int] = []
-
-func matchLottoNumbers(from winningNumbers: [Int]) -> Int {
-    for index in 0..<myLottoNumbers.count {
-        if winningNumbers.contains(myLottoNumbers[index]) {
-            matchedNumbers.append(myLottoNumbers[index])
-        }
-    }
-    return winningNumbers.count
-}
-
-func printLottoResult(_ numberOfWinningNumbers: Int) {
-    let lastIndex = matchedNumbers.index(before: matchedNumbers.endIndex)
-    
-    switch matchedNumbers.count {
-    case 0:
-        print("아쉽지만 겹치는 번호가 없습니다.")
-    case 1:
-        print("축하합니다! 겹치는 번호는 \(matchedNumbers[0]) 입니다!")
-    case 2...numberOfWinningNumbers:
-        print("축하합니다! 겹치는 번호는 ", terminator: "")
-        for index in 0..<matchedNumbers.count {
-            if index == lastIndex {
-                print(matchedNumbers[index], terminator: "")
-            } else {
-                print(matchedNumbers[index], terminator: ", ")
-            }
-        }
-        print(" 입니다!")
-    default:
-        break
+        print("입니다.")
     }
 }
